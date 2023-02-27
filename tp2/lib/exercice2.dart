@@ -2,57 +2,117 @@ import 'package:flutter/material.dart';
 // import 'package:Taquin/util.dart';
 import 'dart:math';
 
-class DisplayImageWidget extends StatelessWidget {
+
+void main() => runApp(const SliderApp());
+
+class SliderApp extends StatelessWidget {
+  const SliderApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('Display image'),
-        ),
-        // body: Center(child: Image.network("https://picsum.photos/1024")));
-        body: Center(
-          child:
-            Image.asset(
-                'assets/image_sympa.jpg',
-                width: 350,
-                height: 350,
-                fit: BoxFit.cover,
-                ),
-        ));
+    return const MaterialApp(
+      home: SliderExample(),
+    );
   }
 }
 
-class ImageRotator extends StatefulWidget {
-  final ImageProvider image;
-
-  ImageRotator({required this.image});
+class SliderExample extends StatefulWidget {
+  const SliderExample({super.key});
 
   @override
-  _ImageRotatorState createState() => _ImageRotatorState();
+  State<SliderExample> createState() => _SliderExampleState();
 }
 
-class _ImageRotatorState extends State<ImageRotator> {
-  double angle = 0;
+class _SliderExampleState extends State<SliderExample> {
+  double _currentSliderPrimaryValue = 0;
+  double _currentSliderSecondaryValue = 0;
+  double _currentSliderTertiaryValue = 2;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Transform.rotate(
-          angle: angle,
-          child: Image(image: widget.image),
-        ),
-        Slider(
-          value: angle,
-          min: 0,
-          max: 2 * 3.14, // 2*pi
-          onChanged: (value) {
-            setState(() {
-              angle = value;
-            });
-          },
-        ),
-      ],
+    return Scaffold(
+      appBar: AppBar(title: const Text('Slider')),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(color: Colors.white),
+            child:Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.identity()
+                ..rotateX(_currentSliderPrimaryValue)
+                ..rotateZ(_currentSliderSecondaryValue)
+                ..scale(_currentSliderTertiaryValue),
+              child : Image.asset ('assets/image_sympa.jpg',
+                )
+            )
+          ),
+          SliderTheme(
+            data: SliderThemeData(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text( 'RotateX', 
+                    style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16.0),
+                  ),
+                  Slider(
+                    value: _currentSliderPrimaryValue,
+                    max: 2*pi,
+                    label: _currentSliderPrimaryValue.round().toString(),
+                    onChanged: (double value) {
+                      setState(() {
+                        _currentSliderPrimaryValue = value;
+                      });
+                    },
+                  ),
+                ],
+            ),
+          ),
+          SliderTheme(
+            data: SliderThemeData(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text( 'RotateZ', 
+                    style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16.0),
+                  ),
+                  Slider(
+                    value: _currentSliderSecondaryValue,
+                    max: 2*pi,
+                    label: _currentSliderSecondaryValue.round().toString(),
+                    onChanged: (double value) {
+                      setState(() {
+                        _currentSliderSecondaryValue = value;
+                      });
+                    },
+                  ),
+                ],
+            ),
+          ),
+          SliderTheme(
+            data: SliderThemeData(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text( 'Scale', 
+                    style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16.0),
+                  ),
+                  Slider(
+                    value: _currentSliderTertiaryValue,
+                    max: 10,
+                    label: _currentSliderTertiaryValue.round().toString(),
+                    onChanged: (double value) {
+                      setState(() {
+                        _currentSliderTertiaryValue = value;
+                      });
+                    },
+                  ),
+                ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }
