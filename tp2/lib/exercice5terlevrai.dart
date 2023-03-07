@@ -137,6 +137,3 @@ class _ImageSlicerState extends State<ImageSlicer> {
     return tiles;
   }
 }
-
-
-

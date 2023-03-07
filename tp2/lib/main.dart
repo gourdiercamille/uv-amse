@@ -7,8 +7,8 @@ import 'exercice2bis.dart' as exo2bis;
 import 'exercice4.dart' as exo4;
 import 'exercice5.dart' as exo5;
 import 'exercice5bis.dart' as exo5bis;
-//import 'exercice5ter.dart' as exo5ter;
-//import 'exercice5tergpt.dart' as exo5tergpt;
+import 'exercice5ter.dart' as exo5ter;
+import 'exercice5terlevrai.dart' as exo5terlevrai;
 import 'exercice6.dart' as exo6;
 import 'jeudetaquin.dart' as jeu;
 
@@ -54,21 +54,21 @@ List exos = [
       title: 'Exercice 5bis',
       subtitle: 'Grid of Cropped Images',
       buildFunc: (context) => exo5bis.DisplayGridViewTileWidget()),
-  //Exo(
-  //    title: 'Exercice 5ter',
-  //    subtitle: 'Grid of Cropped Images',
-  //    buildFunc: (context) => exo5ter.DisplayGridViewTileWidget()),
+  Exo(
+      title: 'Exercice 5ter',
+      subtitle: 'Grid of Cropped Images',
+      buildFunc: (context) => exo5ter.DisplayGridViewTileWidget()),
+  Exo(
+      title: 'Exercice 5terlevrai',
+      subtitle: 'Grid of Cropped Images with a variable size',
+      buildFunc: (context) => exo5terlevrai.MyApp()),
   Exo(
       title: 'Exercice 6',
       subtitle: 'Moving Tiles',
       buildFunc: (context) => exo6.PositionedTiles()),
-  //Exo(
-    //  title: 'Exercice 5tergpt',
-      //subtitle: 'Grid of Cropped Images',
-     // buildFunc: (context) => exo5tergpt.DisplayGridViewTileWidget()),
   Exo(
       title: 'Jeu de Taquin',
-      subtitle: 'Moving Tiles',
+      subtitle: 'The Complete Application',
       buildFunc: (context) => jeu.TaquinApp())
 ];
 
