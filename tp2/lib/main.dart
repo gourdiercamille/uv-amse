@@ -57,7 +57,7 @@ List exos = [
   Exo(
       title: 'Exercice 5ter',
       subtitle: 'Grid of Cropped Images',
-      buildFunc: (context) => exo5ter.DisplayGridViewTileWidget()),
+      buildFunc: (context) => exo5ter.MyApp()),
   Exo(
       title: 'Exercice 5terlevrai',
       subtitle: 'Grid of Cropped Images with a variable size',

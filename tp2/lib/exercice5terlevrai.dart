@@ -30,27 +30,19 @@ class Tile {
 
   Tile({this.image, this.alignment=const Alignment(0,0)});
 
-  Widget croppedImageTile() {
+  Widget croppedImageTile(double sliderValue) {
     return FittedBox(
       fit: BoxFit.fill,
       child: ClipRect(
         child: Container(
           child: Align(
             alignment: this.alignment,
-            widthFactor: 0.3,
-            heightFactor: 0.3,
+            widthFactor: 1/sliderValue,
+            heightFactor: 1/sliderValue,
             child: this.image,
           ),
         ),
       ),
-    );
-  }
-  Widget createTileWidgetFrom(Tile tile) {
-    return InkWell(
-      child: tile.croppedImageTile(),
-      onTap: () {
-        print("tapped on tile");
-      },
     );
   }
 }
@@ -84,6 +76,8 @@ class _ImageSlicerState extends State<ImageSlicer> {
         children: [
           Expanded(
             child: GridView.count(
+              crossAxisSpacing: 2,
+              mainAxisSpacing: 2,
               crossAxisCount: _sliderValue.toInt(),
               children: _tiles,
             ),
@@ -106,6 +100,16 @@ class _ImageSlicerState extends State<ImageSlicer> {
       ),
     );
   }
+  
+  Widget createTileWidgetFrom(Tile tile) {
+    return InkWell(
+      child: tile.croppedImageTile(_sliderValue),
+      onTap: () {
+        print("tapped on tile");
+      },
+    );
+  }
+  
 
 
 
@@ -117,22 +121,19 @@ class _ImageSlicerState extends State<ImageSlicer> {
     List<Widget> tiles = [];
 
     // Create cropped image tiles
-    for (int i = 0; i < pow(sliderValue, 2); i++) {
-      tiles.add(ClipRect(
-        child: Align(
-          alignment: Alignment(
-            -((i % sliderValue) * tileSize),
-            -((i ~/ sliderValue) * tileSize),
-          ),
-          widthFactor: 1 / sliderValue,
-          heightFactor: 1 / sliderValue,
-          child: Image(
+        for (int i = 0; i < sliderValue; i++) {
+          double valuei = i * (2.0 / (sliderValue - 1)) - 1.0;
+          for (int j = 0; j < sliderValue; j++) {
+            double valuej = j * (2.0 / (sliderValue - 1)) - 1.0;
+            Tile tile = new Tile(image: Image.asset('assets/tiger.jpg'), alignment: Alignment(valuej, valuei));
+            tiles.add(createTileWidgetFrom(tile));
+            widthFactor: 2 /sliderValue;
+            heightFactor: 2 /sliderValue;
+            child: Image(
             image: _image,
-            fit: BoxFit.cover,
-          ),
-        ),
-      ));
-    }
+            fit: BoxFit.cover);
+            }
+        }
 
     return tiles;
   }
