@@ -49,7 +49,7 @@ class PositionedTiles extends StatefulWidget {
 
 class PositionedTilesState extends State<PositionedTiles> {
   List<Widget> tiles =
-      List<Widget>.generate(2, (index) => TileWidget(Tile.randomColor()));
+      List<Widget>.generate(3, (index) => TileWidget(Tile.randomColor()));
 
   @override
   Widget build(BuildContext context) {
