@@ -12,6 +12,7 @@ import 'exercice5terlevrai.dart' as exo5terlevrai;
 import 'exercice6.dart' as exo6;
 import 'jeudetaquin.dart' as jeu1;
 import 'jeudetaquinfinal.dart' as jeu2;
+import 'jeudetaquinprof.dart' as jeu3;
 
 void main() => runApp(TaquinApp());
 
@@ -74,7 +75,11 @@ List exos = [
   Exo(
       title: 'Jeu de Taquin Final',
       subtitle: 'The Complete Application',
-      buildFunc: (context) => jeu2.MyApp())
+      buildFunc: (context) => jeu2.MyApp()),
+  Exo(
+      title: 'Jeu de Taquin du Prof',
+      subtitle: 'The Complete Application',
+      buildFunc: (context) => jeu3.MyApp())
 ];
 
 class MenuPage extends StatelessWidget {
