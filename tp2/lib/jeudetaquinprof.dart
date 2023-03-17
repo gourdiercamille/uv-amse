@@ -51,7 +51,10 @@ class _ImageSlicerState extends State<ImageSlicer> {
     late ImageProvider _image;
     late double _sliderValue;
     late List<Tile> _tiles;
+    late List<Tile> _tilesToWin;
     late int indexOfWhiteTile;
+    late int nbMoves;
+    String? endShuffle;
 
     @override
     void initState() {
@@ -63,15 +66,30 @@ class _ImageSlicerState extends State<ImageSlicer> {
         // Initialize slider value
         _sliderValue = 3;
 
+        // Initialize indexOfWhiteTile
+        indexOfWhiteTile = 8;
+
+        // Initialize nbMoves
+        nbMoves = 100;
+
         // Generate tiles
         _tiles = _generateTiles(_sliderValue.toDouble());
 
         // Delete a tile at random
-        _tiles = deleteRandomTile( _tiles );
+        _tiles = deleteLastTile( _tiles );
+
+        //Create a copy of the solution (which is the game state at the beginning)
+        _tilesToWin = _generateTiles(_sliderValue.toDouble());
+
+        //Shuffle the game (100 moves)
+        //_tiles = shuffleGame(nbMoves);
+
+        //is not NULL anymore only when shuffle is over
+        endShuffle = "finito";
 
     }
 
-    List<Tile> deleteRandomTile(List<Tile> tiles){
+    List<Tile> deleteLastTile(List<Tile> tiles){
         int pos = tiles.length-1;
         Tile whiteTile = new Tile(
             image: Image.asset('assets/Carré_blanc.jpg'),
@@ -89,41 +107,137 @@ class _ImageSlicerState extends State<ImageSlicer> {
         indexOfWhiteTile = tileToMoveIndex;
     }
 
-    swapTilesDown() {
-        if(indexOfWhiteTile<=(_sliderValue.toInt()*(_sliderValue.toInt()-1)))
-            setState(() {
-                swapWithBlankTileIndex(indexOfWhiteTile+_sliderValue.toInt());
-            });
-        else
-            print("cannot move down!!!");
-    }
-
-    swapTilesUp() {
+    swapTileFromDown() {
         if(indexOfWhiteTile>=_sliderValue.toInt())
             setState(() {
                 swapWithBlankTileIndex(indexOfWhiteTile-_sliderValue.toInt());
-            });
-        else
-            print("cannot move up!!!");
+                if(endShuffle != null) {
+                  int j=0;
+                  for (int i = 0; i<=_tiles.length; i++) {
+                    if (_tiles[i] == _tilesToWin[i]) {
+                      j+=1;
+                      if (j == _tiles.length) {
+                        EndOfGame(context);
+                      }
+                    }
+                  }
+                }
+            }
+            );
+        else {
+          print("cannot move up!!!");
+        }
     }
-
-    swapTilesLeft() {
-        if((indexOfWhiteTile%_sliderValue.toInt())!=0)
+    
+    swapTileFromUp() {
+        if(indexOfWhiteTile<=(_sliderValue.toInt()*(_sliderValue.toInt()-1)))
             setState(() {
-                swapWithBlankTileIndex(indexOfWhiteTile-1);
-            });
-        else
-            print("cannot move left!!!");
+                swapWithBlankTileIndex(indexOfWhiteTile+_sliderValue.toInt());
+                if(endShuffle != null) {
+                  int j=0;
+                  for (int i = 0; i<=_tiles.length; i++) {
+                    if (_tiles[i] == _tilesToWin[i]) {
+                      j+=1;
+                      if (j == _tiles.length) {
+                        EndOfGame(context);
+                      }
+                    }
+                  }
+                }
+            }
+            );
+        else {
+          print("cannot move down!!!");
+        }
     }
 
-    swapTilesRight() {
+    swapTileFromLeft() {
         if((indexOfWhiteTile%_sliderValue.toInt())!=(_sliderValue.toInt()-1))
             setState(() {
                 swapWithBlankTileIndex(indexOfWhiteTile+1);
-            });
-        else
-            print("cannot move right!!!");
+                if(endShuffle != null) {
+                  int j=0;
+                  for (int i = 0; i<=_tiles.length; i++) {
+                    if (_tiles[i] == _tilesToWin[i]) {
+                      j+=1;
+                      if (j == _tiles.length) {
+                        EndOfGame(context);
+                      }
+                    }
+                  }
+                }
+            }
+            );
+        else {
+          print("cannot move right!!!");
+        }
     }
+
+    swapTileFromRight() {
+        if((indexOfWhiteTile%_sliderValue.toInt())!=0)
+            setState(() {
+                swapWithBlankTileIndex(indexOfWhiteTile-1);
+                if(endShuffle != null) {
+                  int j=0;
+                  for (int i = 0; i<=_tiles.length; i++) {
+                    if (_tiles[i] == _tilesToWin[i]) {
+                      j+=1;
+                      if (j == _tiles.length) {
+                        EndOfGame(context);
+                      }
+                    }
+                  }
+                }
+            }
+            );
+        else {
+          print("cannot move left!!!");
+        }
+    }
+
+    /*shuffleGame(int nbMoves) {
+      for (int i = 1; i <= nbMoves; i++) {
+        int randomInt = Random().nextInt(4) + 1;
+          if (randomInt == 1) {
+            swapTileFromDown();
+            break;
+          }
+          if (randomInt == 2) {
+            swapTileFromUp();
+            break;
+          }
+          if (randomInt == 3) {
+            swapTileFromLeft();
+            break;
+          }
+          if (randomInt == 4) {
+            swapTileFromRight();
+            break;
+          }
+      }
+    }
+    */
+
+    void EndOfGame(BuildContext context) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Bravo !'),
+            content: Text('Tu as remporté la partie'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('Fermer'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+
 
   @override
   Widget build(BuildContext context) {
@@ -156,7 +270,9 @@ class _ImageSlicerState extends State<ImageSlicer> {
               setState(() {
                 _sliderValue = value;
                 _tiles = _generateTiles(_sliderValue.toDouble());
-                _tiles = deleteRandomTile(_tiles);
+                _tiles = deleteLastTile(_tiles);
+                _tilesToWin = _generateTiles(_sliderValue.toDouble());
+                //_tiles = shuffleGame(nbMoves);
                 indexOfWhiteTile = _tiles.length-1;
               });
             },
@@ -168,17 +284,17 @@ class _ImageSlicerState extends State<ImageSlicer> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
                 FloatingActionButton(
-                    heroTag: "btnup",
-                    child: Icon(Icons.arrow_upward), onPressed: swapTilesUp),
+                    heroTag: "btnleft",
+                    child: Icon(Icons.arrow_back), onPressed: swapTileFromLeft()),
                 FloatingActionButton(
-                    heroTag: "btndown",
-                    child: Icon(Icons.arrow_downward), onPressed: swapTilesDown),
+                    heroTag: "btnup",
+                    child: Icon(Icons.arrow_upward), onPressed: swapTileFromUp()),
                 FloatingActionButton(
                     heroTag: "btnright",
-                    child: Icon(Icons.arrow_forward), onPressed: swapTilesRight),
+                    child: Icon(Icons.arrow_forward), onPressed: swapTileFromRight()),
                 FloatingActionButton(
-                    heroTag: "btnleft",
-                    child: Icon(Icons.arrow_back), onPressed: swapTilesLeft),
+                    heroTag: "btndown",
+                    child: Icon(Icons.arrow_downward), onPressed: swapTileFromDown()),
             ],
             ),
         ),
