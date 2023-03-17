@@ -84,7 +84,7 @@ class _ImageSlicerState extends State<ImageSlicer> {
         //Shuffle the game (100 moves)
         //_tiles = shuffleGame(nbMoves);
 
-        //is not NULL anymore only when shuffle is over
+        //is not NULL only when shuffle is over
         endShuffle = "finito";
 
     }
@@ -195,7 +195,7 @@ class _ImageSlicerState extends State<ImageSlicer> {
         }
     }
 
-    /*shuffleGame(int nbMoves) {
+    shuffleGame(int nbMoves) {
       for (int i = 1; i <= nbMoves; i++) {
         int randomInt = Random().nextInt(4) + 1;
           if (randomInt == 1) {
@@ -216,7 +216,7 @@ class _ImageSlicerState extends State<ImageSlicer> {
           }
       }
     }
-    */
+    
 
     void EndOfGame(BuildContext context) {
       showDialog(
@@ -272,7 +272,7 @@ class _ImageSlicerState extends State<ImageSlicer> {
                 _tiles = _generateTiles(_sliderValue.toDouble());
                 _tiles = deleteLastTile(_tiles);
                 _tilesToWin = _generateTiles(_sliderValue.toDouble());
-                //_tiles = shuffleGame(nbMoves);
+                _tiles = shuffleGame(nbMoves);
                 indexOfWhiteTile = _tiles.length-1;
               });
             },
