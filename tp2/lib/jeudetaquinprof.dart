@@ -82,7 +82,7 @@ class _ImageSlicerState extends State<ImageSlicer> {
         _tilesToWin = _generateTiles(_sliderValue.toDouble());
 
         //Shuffle the game (100 moves)
-        //_tiles = shuffleGame(nbMoves);
+        _tiles = shuffleGame(nbMoves);
 
         //is not NULL only when shuffle is over
         endShuffle = "finito";
@@ -107,7 +107,7 @@ class _ImageSlicerState extends State<ImageSlicer> {
         indexOfWhiteTile = tileToMoveIndex;
     }
 
-    swapTileFromDown() {
+    swapTileDown() {
         if(indexOfWhiteTile>=_sliderValue.toInt())
             setState(() {
                 swapWithBlankTileIndex(indexOfWhiteTile-_sliderValue.toInt());
@@ -129,7 +129,7 @@ class _ImageSlicerState extends State<ImageSlicer> {
         }
     }
     
-    swapTileFromUp() {
+    swapTileUp() {
         if(indexOfWhiteTile<=(_sliderValue.toInt()*(_sliderValue.toInt()-1)))
             setState(() {
                 swapWithBlankTileIndex(indexOfWhiteTile+_sliderValue.toInt());
@@ -199,11 +199,11 @@ class _ImageSlicerState extends State<ImageSlicer> {
       for (int i = 1; i <= nbMoves; i++) {
         int randomInt = Random().nextInt(4) + 1;
           if (randomInt == 1) {
-            swapTileFromDown();
+            swapTileDown();
             break;
           }
           if (randomInt == 2) {
-            swapTileFromUp();
+            swapTileUp();
             break;
           }
           if (randomInt == 3) {
@@ -288,13 +288,13 @@ class _ImageSlicerState extends State<ImageSlicer> {
                     child: Icon(Icons.arrow_back), onPressed: swapTileFromLeft()),
                 FloatingActionButton(
                     heroTag: "btnup",
-                    child: Icon(Icons.arrow_upward), onPressed: swapTileFromUp()),
+                    child: Icon(Icons.arrow_upward), onPressed: swapTileUp()),
                 FloatingActionButton(
                     heroTag: "btnright",
                     child: Icon(Icons.arrow_forward), onPressed: swapTileFromRight()),
                 FloatingActionButton(
                     heroTag: "btndown",
-                    child: Icon(Icons.arrow_downward), onPressed: swapTileFromDown()),
+                    child: Icon(Icons.arrow_downward), onPressed: swapTileDown()),
             ],
             ),
         ),
